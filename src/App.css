@@ -8,7 +8,7 @@
 
 .map {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
 }
 .row {
   display: flex;
@@ -16,11 +16,26 @@
 .cell {
   width: 20px;
   height: 20px;
-  border: .5px solid black;
+  border: 0.5px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 .have_body {
   background-color: black;
+  border: 0.5px solid cadetblue;
+}
+.clicked {
+  cursor: not-allowed;
+}
+.map-text {
+  color: "yellow";
+}
+
+.loser::before {
+  content: "Ялагдагч";
+}
+.winner::before {
+  content: "Ялагч";
 }
