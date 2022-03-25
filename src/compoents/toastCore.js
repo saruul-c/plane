@@ -12,7 +12,8 @@ export const toastError = (msg, position = "top-left") => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined
+    progress: undefined,
+    theme: "colored"
   });
 };
 
@@ -24,7 +25,8 @@ export const toastWarning = (msg, position = "top-left") => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined
+    progress: undefined,
+    theme: "colored"
   });
 };
 
@@ -36,7 +38,8 @@ export const toastSuccess = (msg, position = "top-left") => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined
+    progress: undefined,
+    theme: "colored"
   });
 };
 export const toastInfo = (msg, position = "top-left") => {
@@ -47,6 +50,7 @@ export const toastInfo = (msg, position = "top-left") => {
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
-    progress: undefined
+    progress: undefined,
+    theme: "colored"
   });
 };

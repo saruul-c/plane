@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { toastWarning } from "../compoents/toastCore";
+import React, { useState } from "react";
+import { toastSuccess, toastWarning } from "../compoents/toastCore";
 
 export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөнсөн = 0 }) => {} }) {
   const [map, setMap] = useState([
@@ -53,6 +53,9 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
                           result = finded === 0 ? "С" : "Ш";
                         }
                       });
+                      if (result === "С") {
+                        toastSuccess("Тиймээ чи чадлаа");
+                      }
                       map[index][index2] = result;
                       setPoint((e) => ({ шарх: e.шарх + (result === "Ш" ? 1 : 0), сөнсөн: e.сөнсөн + (result === "С" ? 1 : 0) }));
                       setMap([...map]);
