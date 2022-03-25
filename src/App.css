@@ -4,6 +4,7 @@
 
 .container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .map {
@@ -41,13 +42,32 @@
 
 .loser {
   transition: all 1s;
-  background-image: linear-gradient(to top right, red, orange);
+  background-image: linear-gradient(to top right, red, rgb(190, 190, 190));
 }
 
 .winner::before {
-  content: "Ялагч";
+  content: "🎉🏆😄 Ялагч";
+  font-size: 21px;
 }
 
 .loser::before {
-  content: "Ялагдагч";
+  content: "☠️🪦👼 Ялагдагч";
+  font-size: 21px;
+}
+
+.click-active {
+  background-color: rgb(99, 177, 99);
+}
+
+.button {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 20px auto;
+  cursor: pointer;
 }

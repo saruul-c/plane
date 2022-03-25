@@ -1,23 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toastSuccess, toastWarning } from "../compoents/toastCore";
 
-export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөнсөн = 0 }) => {} }) {
-  const [map, setMap] = useState([
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-  ]);
+export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөнсөн = 0 }) => {}, win = false }) {
+  const [map, setMap] = useState([[]]);
 
   function CheckBody(items, index, index2) {
     return items.findIndex((item3) => item3[0] === index2 && item3[1] === index) !== -1;
   }
+
+  useEffect(() => {
+    initalizeMap();
+  }, [bodys]);
 
   return (
     <div className="map">
@@ -40,7 +33,7 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
             {item.map((_, index2) => {
               return (
                 <div
-                  className={"cell " + (bodys.findIndex((item4) => CheckBody(item4, index, index2)) === -1 ? "" : "have_body")}
+                  className={"cell " + (bodys.findIndex((item4) => CheckBody(item4, index, index2)) === -1 || !win ? "" : "have_body")}
                   onClick={() => {
                     if (map[index][index2] === 0) {
                       let result = "X";
@@ -71,4 +64,18 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
       })}
     </div>
   );
+  function initalizeMap() {
+    setMap([
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    ]);
+  }
 }
