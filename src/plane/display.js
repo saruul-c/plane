@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { toastSuccess, toastWarning } from "../compoents/toastCore";
 
-export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөнсөн = 0 }) => {}, win = false }) {
+export default function Display({
+  bodys = [],
+  creatingPlane,
+  active = false,
+  setPoint = ({ шарх = 0, сөнсөн = 0 }) => {},
+  win = false,
+  onShoot = () => {}
+}) {
   const [map, setMap] = useState([[]]);
 
   function CheckBody(items, index, index2) {
@@ -13,7 +20,7 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
   }, [bodys]);
 
   return (
-    <div className="map">
+    <div className={"map " + (active ? "map--active" : "")}>
       <div className="row">
         <div className="cell">0</div>
         {map[0].map((_, index) => {
@@ -33,9 +40,17 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
             {item.map((_, index2) => {
               return (
                 <div
-                  className={"cell " + (bodys.findIndex((item4) => CheckBody(item4, index, index2)) === -1 || !win ? "" : "have_body")}
+                  className={
+                    (map[index][index2] === "Ш" ? " cursor-blood" : "") +
+                    " cell " +
+                    (bodys.findIndex((item4) => CheckBody(item4, index, index2)) === -1 || !win ? "" : "have_body")
+                  }
                   onClick={() => {
-                    if (map[index][index2] === 0) {
+                    if (creatingPlane) {
+                      onShoot(index, index2);
+                    } else if (!active) {
+                      toastWarning("Чиний ээлж болоогүй байна шд байжий2");
+                    } else if (map[index][index2] === 0) {
                       let result = "X";
                       bodys.forEach((b) => {
                         if (result !== "X") {
@@ -46,11 +61,13 @@ export default function Display({ bodys = [], setPoint = ({ шарх = 0, сөн
                           result = finded === 0 ? "С" : "Ш";
                         }
                       });
+
                       if (result === "С") {
                         toastSuccess("Тиймээ чи чадлаа");
                       }
                       map[index][index2] = result;
                       setPoint((e) => ({ шарх: e.шарх + (result === "Ш" ? 1 : 0), сөнсөн: e.сөнсөн + (result === "С" ? 1 : 0) }));
+                      onShoot(index, index2, result);
                       setMap([...map]);
                     } else toastWarning("Чи аль хэдийн дарсан байна ахиад өөр дараагүй нүдэн дээр дарж ажаамуй ¯\\_(ツ)_/¯");
                   }}

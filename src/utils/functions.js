@@ -80,7 +80,7 @@ export function bodyGenrate(bodys = []) {
   return bodys;
 }
 
-// check body
+// check body davhtsal bolon hureenii gadna garsan esehiig shalgana
 
 export function checkBody(bodys = [[]], body = []) {
   let check = true;
@@ -101,8 +101,11 @@ export function checkBody(bodys = [[]], body = []) {
   return check && body.findIndex((item) => item[0] < 0 || item[0] > 9 || item[1] < 0 || item[1] > 9) === -1;
 }
 
-// integer utga butsaa random func
+// sanamsargui buhel toon utga butsaah function
 
 function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+/*
+
+*/

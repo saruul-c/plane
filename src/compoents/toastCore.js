@@ -4,7 +4,7 @@ import { Flip, toast, ToastContainer } from "react-toastify";
 export default function ToastifyBody() {
   return <ToastContainer transition={Flip} />;
 }
-export const toastError = (msg, position = "top-left") => {
+export const toastError = (msg, position = "bottom-right") => {
   toast.error(msg, {
     position: position,
     autoClose: 2000,
@@ -17,7 +17,7 @@ export const toastError = (msg, position = "top-left") => {
   });
 };
 
-export const toastWarning = (msg, position = "top-left") => {
+export const toastWarning = (msg, position = "bottom-right") => {
   toast.warning(msg, {
     position: position,
     autoClose: 2000,
@@ -30,7 +30,7 @@ export const toastWarning = (msg, position = "top-left") => {
   });
 };
 
-export const toastSuccess = (msg, position = "top-left") => {
+export const toastSuccess = (msg, position = "bottom-right") => {
   toast.success(msg, {
     position: position,
     autoClose: 2000,
@@ -42,7 +42,7 @@ export const toastSuccess = (msg, position = "top-left") => {
     theme: "colored"
   });
 };
-export const toastInfo = (msg, position = "top-left") => {
+export const toastInfo = (msg, position = "bottom-right") => {
   toast.info(msg, {
     position: position,
     autoClose: 2000,

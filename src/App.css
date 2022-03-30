@@ -11,6 +11,10 @@
   display: flex;
   flex-direction: column;
 }
+.map--active {
+  box-shadow: 0 0 5px #017505;
+}
+
 .row {
   display: flex;
 }
@@ -22,10 +26,15 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  cursor: url("../public/cursors/sword.png"), auto;
+}
+
+.cell:active {
+  cursor: url("../public/cursors/stired-sword.png"), auto;
 }
 .have_body {
   background-color: black;
-  border: 0.5px solid cadetblue;
+  /* border: 0.5px solid cadetblue; */
 }
 .clicked {
   cursor: not-allowed;
@@ -71,3 +80,10 @@
   margin: 20px auto;
   cursor: pointer;
 }
+.cursor-blood {
+  cursor: url("../public/cursors/blood-sword.png"), auto !important;
+}
+
+/* html {
+  cursor: url("../public/cursors/sword.png"), auto;
+} */
