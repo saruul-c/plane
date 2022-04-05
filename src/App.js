@@ -1,8 +1,8 @@
 import "./App.css";
 import Display from "./plane/display";
-import { useEffect, useState } from "react";
-import ToastifyBody, { toastInfo, toastWarning } from "./compoents/toastCore";
-import { bodyGenrate, checkBody, createBodyBot, createBodyLeft, createBodyRight, createBodyTop } from "./utils/functions";
+import { useEffect, useRef, useState } from "react";
+import ToastifyBody, { toastError, toastInfo, toastInfoLong, toastSuccess, toastWarning } from "./compoents/toastCore";
+import { bodyGenrate, checkBody, createBodyBot, createBodyLeft, createBodyRight, createBodyTop, getRandomInteger } from "./utils/functions";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -11,22 +11,19 @@ function App() {
   const [active, setActive] = useState(true);
   const [humanPoint, setHumanPoint] = useState({ шарх: 0, сөнсөн: 0 });
   const [pcPoint, setPcPoint] = useState({ шарх: 0, сөнсөн: 0 });
-  const [waiting, setWaiting] = useState(true);
+  const [gameStatus, setGameStatus] = useState(false);
   const [tempHead, setTempHead] = useState();
+  const [shootData, setShootData] = useState([]);
 
-  useEffect(() => {
-    setWaiting(gameIsReady());
-  }, [pcBodys, humanBodys]);
+  const humanMapRemote = useRef();
 
   useEffect(() => {
     setPcBodys(bodyGenrate());
-    // setHumanBodys(bodyGenrate());
   }, []);
 
   useEffect(() => {
     function keyPress(e) {
       let bodyTemp;
-
       if (e.key === "w") {
         bodyTemp = createBodyTop(tempHead);
       } else if (e.key === "s") {
@@ -49,10 +46,29 @@ function App() {
         } else toastWarning("Энэ онгоцы зурагдалт буруу байна");
       }
     }
+
     if (tempHead) {
       window.addEventListener("keypress", keyPress);
-    } else window.removeEventListener("keypress", keyPress);
-  }, [tempHead]);
+    }
+    return () => window.removeEventListener("keypress", keyPress);
+  }, [tempHead, humanBodys]);
+
+  useEffect(() => {
+    if (active && humanBodys.length > 2) {
+      let data;
+      setTimeout(() => {
+        data = randomShoot(shootData);
+        humanMapRemote.current?.shoot(data[0], data[1]);
+      }, 1000);
+    }
+    // eslint-disable-next-line
+  }, [active, humanBodys]);
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    setGameStatus(gameIsDone());
+    // eslint-disable-next-line
+  });
 
   return (
     <>
@@ -64,9 +80,10 @@ function App() {
           console.log(e.code);
         }}>
         <div aria-disabled={true} className={"app " + (pcPoint.сөнсөн === 3 ? "winner" : "") + (humanPoint.сөнсөн === 3 ? "loser" : "")} key="user">
-          <h1>Саруулаа</h1>
+          <h1>Тоглогч</h1>
           <Display
             active={active}
+            isAuto
             onShoot={(index, index2) => {
               if (humanBodys.length < 3) {
                 if (!tempHead) setTempHead([index2, index]);
@@ -78,14 +95,16 @@ function App() {
             creatingPlane={false}
             bodys={humanBodys}
             setPoint={setPcPoint}
-            win={humanBodys.length < 3 || gameIsDone()}
+            win={gameStatus}
+            show={humanBodys.length < 3}
+            customRef={humanMapRemote}
           />
           <h4>Шарх: {pcPoint.шарх}</h4>
           <h4>Сөнсөн: {pcPoint.сөнсөн}</h4>
         </div>
         <div aria-disabled={true} className={"app " + (humanPoint.сөнсөн === 3 ? "winner" : "") + (pcPoint.сөнсөн === 3 ? "loser" : "")} key="pc">
-          <h1>Хишигбаяр</h1>
-          <Display active={!active} bodys={pcBodys} onShoot={() => setActive(!active)} setPoint={setHumanPoint} win={gameIsDone()} />
+          <h1>Аймаар машин</h1>
+          <Display active={!active} bodys={pcBodys} onShoot={() => setActive(!active)} setPoint={setHumanPoint} win={gameStatus} />
           <h4>Шарх: {humanPoint.шарх}</h4>
           <h4>Сөнсөн: {humanPoint.сөнсөн}</h4>
         </div>
@@ -94,18 +113,43 @@ function App() {
       <ToastifyBody />
     </>
   );
+
   function restart() {
     setPcBodys(bodyGenrate());
-    setHumanBodys(bodyGenrate());
+    setHumanBodys([]);
     setHumanPoint({ шарх: 0, сөнсөн: 0 });
     setPcPoint({ шарх: 0, сөнсөн: 0 });
+    setShootData([]);
+    setActive(true);
   }
 
   function gameIsDone() {
+    let result = pcPoint.сөнсөн === 3 ? -1 : humanPoint.сөнсөн === 3 ? 1 : 0;
+    if (result === 1) {
+      toastSuccess("Баяр хүргэе та яллаа");
+      toastInfoLong(
+        "Машин: Хэдийгээр би одоогоор сайн буудахгүй байгаа ч гэсэн Artificial Intelligence ийн ачаар мэдээлэл цуглуулан ялах магадлалаа илүү сайжруулах болно."
+      );
+    } else if (result === -1) {
+      toastError("Та аймаар машинд ялагдлаа таньд баяр хүргэе 😂😂🤣");
+    }
     return pcPoint.сөнсөн === 3 ? -1 : humanPoint.сөнсөн === 3 ? 1 : 0;
   }
-  function gameIsReady() {
-    return pcBodys.length === 3 && humanBodys.length === 3;
+
+  function randomShoot(shootData = [[]]) {
+    let shoot;
+    let check;
+    while (!check) {
+      check = true;
+      shoot = [getRandomInteger(0, 9), getRandomInteger(0, 9)];
+      shootData.forEach((item) => {
+        if (check) {
+          if (item[0] === shoot[0] && item[1] === shoot[1]) check = false;
+        }
+      });
+    }
+    setShootData([...shootData, shoot]);
+    return shoot;
   }
 }
 

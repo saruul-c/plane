@@ -103,7 +103,7 @@ export function checkBody(bodys = [[]], body = []) {
 
 // sanamsargui buhel toon utga butsaah function
 
-function getRandomInteger(min, max) {
+export function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 /*
